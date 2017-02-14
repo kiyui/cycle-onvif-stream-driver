@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "arpjs": "^1.1.11",
+    "arpscan": "^0.5.0",
+    "node-onvif": "^0.0.9"
+  },
+  "name": "cycle-onvif-stream-driver",
+  "version": "1.0.0",
+  "description": "Cycle.JS ONVIF Stream Driver",
+  "main": "dist/makeONVIFStreamDriver.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TimurKiyivinski/cycle-onvif-stream-driver.git"
+  },
+  "keywords": [
+    "cycle",
+    "driver",
+    "onvif",
+    "arp"
+  ],
+  "author": "Timur Kiyivinski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TimurKiyivinski/cycle-onvif-stream-driver/issues"
+  },
+  "homepage": "https://github.com/TimurKiyivinski/cycle-onvif-stream-driver#readme"
+}
