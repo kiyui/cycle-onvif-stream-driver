@@ -2,10 +2,6 @@ const onvif = require('node-onvif')
 const arpScanner = require('arpscan/promise')
 const xs = require('xstream').default
 
-// Requirement for arp-scan without root
-// File: /etc/sudoers.d/arp-scan
-// $user ALL = NOPASSWD: /usr/bin/arp-scan
-
 function getONVIFStream (config) {
   const getStreams = addresses => addresses.map(address => {
     // TODO: Consider ability to support multiple user/pass combinations
