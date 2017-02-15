@@ -8,6 +8,8 @@ const xs = require('xstream').default
 
 function getONVIFStream (config) {
   const getStreams = addresses => addresses.map(address => {
+    // TODO: Consider ability to support multiple user/pass combinations
+    // Unsure how this can be implemented though
     const device = new onvif.OnvifDevice({
       xaddr: `http://${address.ip}/onvif/device_service`,
       user: config.user,
@@ -38,15 +40,15 @@ function getONVIFStream (config) {
 function WrapONVIFStream (config) {
   const callbacks = {}
 
+  // Perform action
   this.call = (category, nic) => {
     getONVIFStream(Object.assign({}, config, { interface: nic })).then(data => {
-      console.log(`call category ${category}`)
       callbacks[category](data)
     })
   }
 
+  // Set callback
   this.on = (category, callback) => {
-    console.log(`on category ${category}`)
     callbacks[category] = callback
   }
 }
