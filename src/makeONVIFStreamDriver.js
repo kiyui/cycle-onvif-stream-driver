@@ -1,5 +1,6 @@
 const onvif = require('node-onvif')
 const arpScanner = require('arpscan/promise')
+const xs = require('xstream').default
 
 // Requirement for arp-scan without root
 // File: /etc/sudoers.d/arp-scan
@@ -9,8 +10,8 @@ function getONVIFStream (config) {
   const getStreams = addresses => addresses.map(address => {
     const device = new onvif.OnvifDevice({
       xaddr: `http://${address.ip}/onvif/device_service`,
-      user: 'admin',
-      pass: 'admin'
+      user: config.user,
+      pass: config.pass
     })
     return new Promise((resolve, reject) => {
       device.init(err => {
@@ -34,8 +35,45 @@ function getONVIFStream (config) {
     .then(streams => streams.filter(stream => stream !== null)) // Filter out non-ONVIF devices
 }
 
+function WrapONVIFStream (config) {
+  const callbacks = {}
+
+  this.call = (category, nic) => {
+    getONVIFStream(Object.assign({}, config, { interface: nic })).then(data => {
+      console.log(`call category ${category}`)
+      callbacks[category](data)
+    })
+  }
+
+  this.on = (category, callback) => {
+    console.log(`on category ${category}`)
+    callbacks[category] = callback
+  }
+}
+
 function makeONVIFStreamDriver (config) {
+  const wrapONVIFStream = new WrapONVIFStream(config)
+
   function onvifStreamDriver (outgoing$) {
+    outgoing$.addListener({
+      next: outgoing => {
+        wrapONVIFStream.call(outgoing.category, outgoing.interface)
+      },
+      error: () => {
+      },
+      complete: () => {
+      }
+    })
+
+    return {
+      select: streamListener => xs.create({
+        start: listener => {
+          wrapONVIFStream.on(streamListener, data => listener.next(data))
+        },
+        stop: () => {
+        }
+      })
+    }
   }
 
   return onvifStreamDriver
