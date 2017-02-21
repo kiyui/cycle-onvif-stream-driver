@@ -4,12 +4,13 @@ const xs = require('xstream').default
 
 function getONVIFStream (config) {
   const getStreams = addresses => addresses.map(address => {
-    // TODO: Consider ability to support multiple user/pass combinations
-    // Unsure how this can be implemented though
+    const getUser = ip => config.passwords && config.passwords[ip] ? config.passwords[ip].user : config.user
+    const getPass = ip => config.passwords && config.passwords[ip] ? config.passwords[ip].pass : config.pass
+
     const device = new onvif.OnvifDevice({
       xaddr: `http://${address.ip}/onvif/device_service`,
-      user: config.user,
-      pass: config.pass
+      user: getUser(address.ip),
+      pass: getPass(address.ip)
     })
     return new Promise((resolve, reject) => {
       device.init(err => {

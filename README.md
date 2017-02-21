@@ -38,6 +38,26 @@ For example:
 sources.ONVIF.select('category')
 ```
 
+### passwords
+The `user` and `pass` keys determine the default authentication details for your IP cameras.
+However if certain devices have specific or different passwords, you can always pass in a JSON
+object with the appropriate values for `user` and `pass`.
+```javascript
+const drivers = {
+  ...
+  ONVIF: makeONVIFStreamDriver({
+    ...
+    passwords: {
+      '10.17.96.126': {
+        user: 'admin',
+        pass: '12345'
+      }
+    },
+    user: 'admin',
+    pass: 'admin'
+  })
+}
+```
 
 ## detection
 This driver makes use of ARP requests instead of SOAP requests to detect cameras
@@ -54,3 +74,16 @@ $user ALL = NOPASSWD: /usr/bin/arp-scan
 ```
 After configuring this, you will still need a setup similar to that in `samples/`
 to execute `arp-scan` with sudo prefixed to it.
+
+### discover multiple subnets
+By default, the `arpscan` library is set up to only discover IPs on the local subnet.
+The driver can be configured to discover multiple subnets by passing an `args` list:
+```javascript
+const drivers = {
+  ONVIF: makeONVIFStreamDriver({
+    ...
+    args: ['10.17.96.0/24', '192.168.191.0/24'],
+    ...
+  })
+}
+```
