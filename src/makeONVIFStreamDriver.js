@@ -6,9 +6,10 @@ function getONVIFStream (config) {
   const getStreams = addresses => addresses.map(address => {
     const getUser = ip => config.passwords && config.passwords[ip] ? config.passwords[ip].user : config.user
     const getPass = ip => config.passwords && config.passwords[ip] ? config.passwords[ip].pass : config.pass
+    const getPort = ip => config.passwords && config.passwords[ip] ? `:${config.passwords[ip].port}` : ''
 
     const device = new onvif.OnvifDevice({
-      xaddr: `http://${address.ip}/onvif/device_service`,
+      xaddr: `http://${address.ip}${getPort(address.ip)}/onvif/device_service`,
       user: getUser(address.ip),
       pass: getPass(address.ip)
     })
