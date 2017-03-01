@@ -1,4 +1,3 @@
-const xs = require('xstream').default
 const makeONVIFStreamDriver = require('../src/makeONVIFStreamDriver')
 const Cycle = require('@cycle/xstream-run')
 
@@ -39,6 +38,18 @@ const main = sources => {
 const drivers = {
   ONVIF: makeONVIFStreamDriver({
     command: `${__dirname}/sudo_arp_scan.sh`,
+    args: ['10.17.96.0/24', '192.168.191.0/24'],
+    passwords: {
+      '10.17.96.125': {
+        user: 'admin2',
+        pass: 'admin',
+        port: 8899
+      },
+      '10.17.96.126': {
+        user: 'admin',
+        pass: '12345'
+      }
+    },
     user: 'admin',
     pass: 'admin'
   })
