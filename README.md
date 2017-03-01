@@ -38,16 +38,22 @@ For example:
 sources.ONVIF.select('category')
 ```
 
-### passwords
+### passwords and ports
 The `user` and `pass` keys determine the default authentication details for your IP cameras.
 However if certain devices have specific or different passwords, you can always pass in a JSON
-object with the appropriate values for `user` and `pass`.
+object with the appropriate values for `user` and `pass`. You can do the same for devices with
+non-standard ONVIF ports (default is port 80).
 ```javascript
 const drivers = {
   ...
   ONVIF: makeONVIFStreamDriver({
     ...
     passwords: {
+      '10.17.96.125': {
+        user: 'admin2',
+        pass: 'admin',
+        port: 8899
+      },
       '10.17.96.126': {
         user: 'admin',
         pass: '12345'
