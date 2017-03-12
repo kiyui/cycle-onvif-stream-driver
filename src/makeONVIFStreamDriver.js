@@ -15,11 +15,16 @@ function getONVIFStream (config) {
     })
     return new Promise((resolve, reject) => {
       device.init(err => {
+        const profile = device.getCurrentProfile()
         if (err) {
           resolve(null)
         } else {
           try {
-            resolve(Object.assign({}, address, { stream: device.getUdpStreamUrl() }))
+            if (profile && profile.video && profile.video.encoder && profile.video.encoder.framerate) {
+              resolve(Object.assign({}, address, { stream: device.getUdpStreamUrl(), fps: profile.video.encoder.framerate }))
+            } else {
+              resolve(Object.assign({}, address, { stream: device.getUdpStreamUrl() }))
+            }
           } catch (e) {
             resolve(null)
           }
