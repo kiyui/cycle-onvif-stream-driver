@@ -38,6 +38,16 @@ For example:
 sources.ONVIF.select('category')
 ```
 
+Sample output:
+```javascript
+[{  ip: '10.17.96.125',
+    mac: '...',
+    vendor: '...',
+    timestamp: ...,
+    stream: 'rtsp://...',
+    fps: 15 }]
+```
+
 ### passwords and ports
 The `user` and `pass` keys determine the default authentication details for your IP cameras.
 However if certain devices have specific or different passwords, you can always pass in a JSON
