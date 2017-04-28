@@ -103,3 +103,26 @@ const drivers = {
   })
 }
 ```
+
+### override with password array
+If you want to manually add a device from outside your detection subnet, you can make define it in
+the `passwords` array and set a `password_override` key as `true` in the driver settings. This will
+still enable ONVIF capabilities of the device such as stream detection without having to rely on the
+driver to detect the device.
+
+```javascript
+const drivers = {
+  ONVIF: makeONVIFStreamDriver({
+    ...
+    password_override: true,
+    passwords: {
+      '192.168.0.2': {
+        user: 'admin',
+        pass: 'admin',
+        port: 10080
+      }
+    },
+    ...
+  })
+}
+```

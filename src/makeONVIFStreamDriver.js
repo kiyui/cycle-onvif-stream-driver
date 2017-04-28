@@ -35,6 +35,18 @@ function getONVIFStream (config) {
 
   // Return promise with all streams
   return arpScanner(config)
+    .then(data => {
+      if (config.password_override === true) {
+        const override = Object.keys(config.passwords)
+        const manual = override
+          .map(ip => Object.assign({}, {ip}, config.passwords[ip]))
+        const filteredDetect = data
+          .filter(device => override.indexOf(device.ip) === -1)
+        return [...filteredDetect, ...manual]
+      } else {
+        return data
+      }
+    })
     .then(data => getStreams(data)) // Create promise to get stream for specific IP
     .then(streamPromises => Promise.all(streamPromises)) // Wait for all promises to resolve
     .then(streams => streams.filter(stream => stream !== null)) // Filter out non-ONVIF devices
