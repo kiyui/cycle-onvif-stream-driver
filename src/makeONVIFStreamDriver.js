@@ -57,9 +57,13 @@ function WrapONVIFStream (config) {
 
   // Perform action
   this.call = (category, nic) => {
-    getONVIFStream(Object.assign({}, config, { interface: nic })).then(data => {
-      callbacks[category](data)
-    })
+    if (nic === false) {
+      callbacks[category]([])
+    } else {
+      getONVIFStream(Object.assign({}, config, { interface: nic })).then(data => {
+        callbacks[category](data)
+      })
+    }
   }
 
   // Set callback
